@@ -23,11 +23,17 @@ public class RegisterServiceImpl implements RegisterService {
     @Override
     public User userRegister(User user) {
 
-        if (registerValidator.isPasswordMatch(user)) {
-            return getUser(user);
+        if (registerValidator.isValidPassword(user.getPassword())) {
+            if (registerValidator.isPasswordMatch(user)) {
+                return getUser(user);
+            } else {
+                throw new InvalidPasswordMatch("The password and confirm password do not match. Please ensure both fields contain the same password.");
+            }
         } else {
-            throw new InvalidPasswordMatch("The password and confirm password do not match. Please ensure both fields contain the same password.");
+            throw new InvalidPasswordMatch("Password does not meet the required criteria. It must be at least 8 characters long and include uppercase, lowercase, digit, and special character.");
         }
+
+
     }
 
     private User getUser(User user) {
